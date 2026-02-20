@@ -68,8 +68,11 @@ public class ProductService {
         Product product = repository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
 
-        product.setName(productSupplyDTO.getName());
-        product.setValue(productSupplyDTO.getValue());
+        if (productSupplyDTO.getName() != null) 
+            product.setName(productSupplyDTO.getName());
+
+        if (productSupplyDTO.getValue() != 0) 
+            product.setValue(productSupplyDTO.getValue());
 
         product.getSupplies().clear();
         repository.flush();

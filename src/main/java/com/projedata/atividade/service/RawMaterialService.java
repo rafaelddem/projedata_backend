@@ -35,8 +35,11 @@ public class RawMaterialService {
         RawMaterial RawMaterial = repository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Matéria-prima não encontrada"));
 
-        RawMaterial.setName(updatedRawMaterial.getName());
-        RawMaterial.setQuantity(updatedRawMaterial.getQuantity());
+        if (updatedRawMaterial.getName() != null) 
+            RawMaterial.setName(updatedRawMaterial.getName());
+
+        if (updatedRawMaterial.getQuantity() != 0) 
+            RawMaterial.setQuantity(updatedRawMaterial.getQuantity());
 
         return repository.save(RawMaterial);
     }
