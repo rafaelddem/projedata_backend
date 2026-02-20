@@ -1,19 +1,19 @@
 package com.projedata.atividade.dto;
 
-import java.text.DecimalFormat;
-
 public class SupplyDTO {
 
     private int id;
     private String name;
     private int value;
     private int max_production;
+    private int max_value;
 
-    public SupplyDTO(int id, String name, int value, int max_production){
+    public SupplyDTO(int id, String name, int value, int max_production, int max_value){
         this.id = id;
         this.name = name;
         this.value = value;
         this.max_production = max_production;
+        this.max_value = max_value;
     }
 
     public int getId() {
@@ -48,10 +48,11 @@ public class SupplyDTO {
         this.max_production = max_production;
     }
 
-    public double getMaxValue() {
-        double valueFormated = this.max_production * ((double) this.value / 100);
-        DecimalFormat formater = new DecimalFormat("#.##");
+    public int getMaxValue() {
+        return this.max_value;
+    }
 
-        return Double.parseDouble(formater.format(valueFormated));
+    public void setMaxValue(int max_value) {
+        this.max_value = max_value;
     }
 }

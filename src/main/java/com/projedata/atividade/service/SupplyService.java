@@ -23,7 +23,8 @@ public class SupplyService {
                 ((Number) r[0]).intValue(),
                 (String) r[1],
                 r[2] == null ? 0 : ((Number) r[2]).intValue(),
-                r[3] == null ? 0 : ((Number) r[3]).intValue()
+                r[3] == null ? 0 : ((Number) r[3]).intValue(),
+                r[4] == null ? 0 : ((Number) r[4]).intValue()
             ))
             .toList();
     }
