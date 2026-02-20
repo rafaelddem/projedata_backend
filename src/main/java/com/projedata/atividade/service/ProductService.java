@@ -59,6 +59,7 @@ public class ProductService {
         return repository.findById(id).orElse(null);
     }
 
+    @Transactional
     public Product update(int id, ProductSupplyDTO productSupplyDTO) {
         Product product = repository.findById(id)
             .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
