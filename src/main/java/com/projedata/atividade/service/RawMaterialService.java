@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import com.projedata.atividade.model.RawMaterial;
 import com.projedata.atividade.repository.RawMaterialRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class RawMaterialService {
 
@@ -25,12 +27,13 @@ public class RawMaterialService {
     }
 
     public RawMaterial find(int id) {
-        return repository.findById(id).orElse(null);
+        return repository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Matéria-prima não encontrada"));
     }
 
     public RawMaterial update(int id, RawMaterial updatedRawMaterial) {
         RawMaterial RawMaterial = repository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Matéria-prima não encontrada"));
+            .orElseThrow(() -> new EntityNotFoundException("Matéria-prima não encontrada"));
 
         RawMaterial.setName(updatedRawMaterial.getName());
         RawMaterial.setQuantity(updatedRawMaterial.getQuantity());
