@@ -1,71 +1,41 @@
 package com.projedata.atividade.controller;
 
 import com.projedata.atividade.dto.ProductSupplyDTO;
-import com.projedata.atividade.dto.RawMaterialSupplyDTO;
 import com.projedata.atividade.model.Product;
-import com.projedata.atividade.model.RawMaterial;
-import com.projedata.atividade.model.Supply;
-import com.projedata.atividade.repository.ProductRepository;
-import com.projedata.atividade.repository.RawMaterialRepository;
+import com.projedata.atividade.service.ProductService;
 
-import jakarta.transaction.Transactional;
+import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/products")
 public class ProductController {
 
-    private final ProductRepository repository;
-    private final RawMaterialRepository rawMaterialRepository;
+    private final ProductService service;
 
     public ProductController(
-        ProductRepository repository,
-        RawMaterialRepository rawMaterialRepository
+        ProductService service
     ) {
-        this.repository = repository;
-        this.rawMaterialRepository = rawMaterialRepository;
+        this.service = service;
     }
 
-    @Transactional
     @PostMapping
     public ResponseEntity<Product> create(@RequestBody ProductSupplyDTO productSupplyDTO) {
-        Product product = new Product();
-        product.setName(productSupplyDTO.getName());
-        product.setValue(productSupplyDTO.getValue());
-
-        List<Supply> supplies = new ArrayList<>();
-
-        for (RawMaterialSupplyDTO rawMaterialSupplyDTO : productSupplyDTO.getRawMaterialSupplies()) {
-            RawMaterial rawMaterial = rawMaterialRepository.findById(rawMaterialSupplyDTO.getRawMaterialId())
-                .orElseThrow(() -> new RuntimeException("Matéria-prima não encontrada"));
-
-            Supply supply = new Supply();
-            supply.setProduct(product);
-            supply.setRawMaterial(rawMaterial);
-            supply.setQuantity(rawMaterialSupplyDTO.getQuantity());
-
-            supplies.add(supply);
-        }
-
-        product.setSupplies(supplies);
-        repository.save(product);
-
-        return ResponseEntity.ok(product);
+        Product product = service.create(productSupplyDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 
     @GetMapping
     public ResponseEntity<List<Product>> list() {
-        return ResponseEntity.ok(repository.findAll());
+        return ResponseEntity.ok(service.list());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Product> find(@PathVariable int id) {
-        Product product = repository.findById(id).orElse(null);
+        Product product = service.find(id);
 
         return (product != null)
             ? ResponseEntity.ok(product)
@@ -74,35 +44,12 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Product> update(@PathVariable int id, @RequestBody ProductSupplyDTO productSupplyDTO) {
-        Product product = repository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
-
-        product.setName(productSupplyDTO.getName());
-        product.setValue(productSupplyDTO.getValue());
-
-        List<Supply> supplies = new ArrayList<>();
-
-        for (RawMaterialSupplyDTO rawMaterialSupplyDTO : productSupplyDTO.getRawMaterialSupplies()) {
-            RawMaterial rawMaterial = rawMaterialRepository.findById(rawMaterialSupplyDTO.getRawMaterialId())
-                .orElseThrow(() -> new RuntimeException("Matéria-prima não encontrada"));
-
-            Supply supply = new Supply();
-            supply.setProduct(product);
-            supply.setRawMaterial(rawMaterial);
-            supply.setQuantity(rawMaterialSupplyDTO.getQuantity());
-
-            supplies.add(supply);
-        }
-
-        product.setSupplies(supplies);
-        repository.save(product);
-
-        return ResponseEntity.ok(product);
+        return ResponseEntity.ok(service.update(id, productSupplyDTO));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Product> delete(@PathVariable int id) {
-        repository.deleteById(id);
+        service.delete(id);
 
         return ResponseEntity.noContent().build();
     }

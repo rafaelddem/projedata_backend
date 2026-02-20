@@ -21,7 +21,7 @@ public class Product {
 
     private int value;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Supply> supplies = new ArrayList<>();
 
     public int getId() {
