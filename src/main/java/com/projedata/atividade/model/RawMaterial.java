@@ -14,7 +14,7 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class RawMaterial {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
