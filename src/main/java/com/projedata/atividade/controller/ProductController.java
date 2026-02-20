@@ -10,6 +10,7 @@ import com.projedata.atividade.repository.RawMaterialRepository;
 
 import jakarta.transaction.Transactional;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -30,14 +31,9 @@ public class ProductController {
         this.rawMaterialRepository = rawMaterialRepository;
     }
 
-    // @PostMapping
-    // public Product create(@RequestBody Product product) {
-    //     return repository.save(product);
-    // }
-
     @Transactional
     @PostMapping
-    public void create(@RequestBody ProductSupplyDTO productSupplyDTO) {
+    public ResponseEntity<Product> create(@RequestBody ProductSupplyDTO productSupplyDTO) {
         Product product = new Product();
         product.setName(productSupplyDTO.getName());
         product.setValue(productSupplyDTO.getValue());
@@ -58,31 +54,56 @@ public class ProductController {
 
         product.setSupplies(supplies);
         repository.save(product);
+
+        return ResponseEntity.ok(product);
     }
 
     @GetMapping
-    public List<Product> list() {
-        return repository.findAll();
+    public ResponseEntity<List<Product>> list() {
+        return ResponseEntity.ok(repository.findAll());
     }
 
     @GetMapping("/{id}")
-    public Product find(@PathVariable int id) {
-        return repository.findById(id).orElse(null);
+    public ResponseEntity<Product> find(@PathVariable int id) {
+        Product product = repository.findById(id).orElse(null);
+
+        return (product != null)
+            ? ResponseEntity.ok(product)
+            : ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public Product update(@PathVariable int id, @RequestBody Product updatedProduct) {
+    public ResponseEntity<Product> update(@PathVariable int id, @RequestBody ProductSupplyDTO productSupplyDTO) {
         Product product = repository.findById(id)
             .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
-        product.setName(updatedProduct.getName());
-        product.setValue(updatedProduct.getValue());
+        product.setName(productSupplyDTO.getName());
+        product.setValue(productSupplyDTO.getValue());
 
-        return repository.save(product);
+        List<Supply> supplies = new ArrayList<>();
+
+        for (RawMaterialSupplyDTO rawMaterialSupplyDTO : productSupplyDTO.getRawMaterialSupplies()) {
+            RawMaterial rawMaterial = rawMaterialRepository.findById(rawMaterialSupplyDTO.getRawMaterialId())
+                .orElseThrow(() -> new RuntimeException("Matéria-prima não encontrada"));
+
+            Supply supply = new Supply();
+            supply.setProduct(product);
+            supply.setRawMaterial(rawMaterial);
+            supply.setQuantity(rawMaterialSupplyDTO.getQuantity());
+
+            supplies.add(supply);
+        }
+
+        product.setSupplies(supplies);
+        repository.save(product);
+
+        return ResponseEntity.ok(product);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id) {
+    public ResponseEntity<Product> delete(@PathVariable int id) {
         repository.deleteById(id);
+
+        return ResponseEntity.noContent().build();
     }
 }
