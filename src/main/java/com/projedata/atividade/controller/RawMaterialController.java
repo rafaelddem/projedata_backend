@@ -1,6 +1,7 @@
 package com.projedata.atividade.controller;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,34 +21,64 @@ public class RawMaterialController {
     }
 
     @PostMapping
-    public ResponseEntity<RawMaterial> create(@RequestBody RawMaterial rawMaterial) {
-        rawMaterial = service.create(rawMaterial);
-        return ResponseEntity.status(HttpStatus.CREATED).body(rawMaterial);
+    public ResponseEntity<?> create(@RequestBody RawMaterial rawMaterial) {
+        try {
+            rawMaterial = service.create(rawMaterial);
+            return ResponseEntity.status(HttpStatus.CREATED).body(rawMaterial);
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Erro inesperado no servidor. Favor contactar o suporte");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
     }
 
     @GetMapping
-    public ResponseEntity<List<RawMaterial>> list() {
-        return ResponseEntity.ok(service.list());
+    public ResponseEntity<?> list() {
+        try {
+            return ResponseEntity.ok(service.list());
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Erro inesperado no servidor. Favor contactar o suporte");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RawMaterial> find(@PathVariable int id) {
-        RawMaterial RawMaterial = service.find(id);
+    public ResponseEntity<?> find(@PathVariable int id) {
+        try {
+            RawMaterial rawMaterial = service.find(id);
 
-        return (RawMaterial != null)
-            ? ResponseEntity.ok(RawMaterial)
-            : ResponseEntity.noContent().build();
+            return (rawMaterial != null)
+                ? ResponseEntity.ok(rawMaterial)
+                : ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Erro inesperado no servidor. Favor contactar o suporte");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RawMaterial> update(@PathVariable int id, @RequestBody RawMaterial RawMaterial) {
-        return ResponseEntity.ok(service.update(id, RawMaterial));
+    public ResponseEntity<?> update(@PathVariable int id, @RequestBody RawMaterial rawMaterial) {
+        try {
+            return ResponseEntity.ok(service.update(id, rawMaterial));
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Erro inesperado no servidor. Favor contactar o suporte");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<RawMaterial> delete(@PathVariable int id) {
-        service.delete(id);
+    public ResponseEntity<?> delete(@PathVariable int id) {
+        try {
+            service.delete(id);
 
-        return ResponseEntity.noContent().build();
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Erro inesperado no servidor. Favor contactar o suporte");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
     }
 }

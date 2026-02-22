@@ -4,7 +4,8 @@ import com.projedata.atividade.dto.ProductSupplyDTO;
 import com.projedata.atividade.model.Product;
 import com.projedata.atividade.service.ProductService;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,34 +24,64 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> create(@RequestBody ProductSupplyDTO productSupplyDTO) {
-        Product product = service.create(productSupplyDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(product);
+    public ResponseEntity<?> create(@RequestBody ProductSupplyDTO productSupplyDTO) {
+        try {
+            Product product = service.create(productSupplyDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(product);
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Erro inesperado no servidor. Favor contactar o suporte");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> list() {
-        return ResponseEntity.ok(service.list());
+    public ResponseEntity<?> list() {
+        try {
+            return ResponseEntity.ok(service.list());
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Erro inesperado no servidor. Favor contactar o suporte");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> find(@PathVariable int id) {
-        Product product = service.find(id);
+    public ResponseEntity<?> find(@PathVariable int id) {
+        try {
+            Product product = service.find(id);
 
-        return (product != null)
-            ? ResponseEntity.ok(product)
-            : ResponseEntity.noContent().build();
+            return (product != null)
+                ? ResponseEntity.ok(product)
+                : ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Erro inesperado no servidor. Favor contactar o suporte");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> update(@PathVariable int id, @RequestBody ProductSupplyDTO productSupplyDTO) {
-        return ResponseEntity.ok(service.update(id, productSupplyDTO));
+    public ResponseEntity<?> update(@PathVariable int id, @RequestBody ProductSupplyDTO productSupplyDTO) {
+        try {
+            return ResponseEntity.ok(service.update(id, productSupplyDTO));
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Erro inesperado no servidor. Favor contactar o suporte");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Product> delete(@PathVariable int id) {
-        service.delete(id);
+    public ResponseEntity<?> delete(@PathVariable int id) {
+        try {
+            service.delete(id);
 
-        return ResponseEntity.noContent().build();
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Erro inesperado no servidor. Favor contactar o suporte");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
     }
 }
