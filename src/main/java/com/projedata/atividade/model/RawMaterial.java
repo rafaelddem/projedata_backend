@@ -23,6 +23,10 @@ public class RawMaterial {
 
     private int quantity;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "rawMaterial", cascade = CascadeType.ALL)
+    private List<Supply> supplies = new ArrayList<>();
+
     public int getId() {
         return this.id;
     }
@@ -47,7 +51,7 @@ public class RawMaterial {
         this.quantity = quantity;
     }
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "rawMaterial", cascade = CascadeType.ALL)
-    private List<Supply> supplies = new ArrayList<>();
+    public List<Supply> getSupplies() {
+        return this.supplies;
+    }
 }

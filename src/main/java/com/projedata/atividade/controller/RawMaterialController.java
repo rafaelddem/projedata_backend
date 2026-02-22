@@ -27,7 +27,7 @@ public class RawMaterialController {
             return ResponseEntity.status(HttpStatus.CREATED).body(rawMaterial);
         } catch (Exception e) {
             Map<String, Object> error = new HashMap<>();
-            error.put("message", "Erro inesperado no servidor. Favor contactar o suporte");
+            error.put("message", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }
@@ -38,7 +38,7 @@ public class RawMaterialController {
             return ResponseEntity.ok(service.list());
         } catch (Exception e) {
             Map<String, Object> error = new HashMap<>();
-            error.put("message", "Erro inesperado no servidor. Favor contactar o suporte");
+            error.put("message", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }
@@ -53,7 +53,7 @@ public class RawMaterialController {
                 : ResponseEntity.noContent().build();
         } catch (Exception e) {
             Map<String, Object> error = new HashMap<>();
-            error.put("message", "Erro inesperado no servidor. Favor contactar o suporte");
+            error.put("message", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }
@@ -64,7 +64,7 @@ public class RawMaterialController {
             return ResponseEntity.ok(service.update(id, rawMaterial));
         } catch (Exception e) {
             Map<String, Object> error = new HashMap<>();
-            error.put("message", "Erro inesperado no servidor. Favor contactar o suporte");
+            error.put("message", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }
@@ -77,7 +77,7 @@ public class RawMaterialController {
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             Map<String, Object> error = new HashMap<>();
-            error.put("message", "Erro inesperado no servidor. Favor contactar o suporte");
+            error.put("message", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }

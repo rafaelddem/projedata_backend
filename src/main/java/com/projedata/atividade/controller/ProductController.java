@@ -30,7 +30,7 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.CREATED).body(product);
         } catch (Exception e) {
             Map<String, Object> error = new HashMap<>();
-            error.put("message", "Erro inesperado no servidor. Favor contactar o suporte");
+            error.put("message", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }
@@ -41,7 +41,7 @@ public class ProductController {
             return ResponseEntity.ok(service.list());
         } catch (Exception e) {
             Map<String, Object> error = new HashMap<>();
-            error.put("message", "Erro inesperado no servidor. Favor contactar o suporte");
+            error.put("message", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }
@@ -56,7 +56,7 @@ public class ProductController {
                 : ResponseEntity.noContent().build();
         } catch (Exception e) {
             Map<String, Object> error = new HashMap<>();
-            error.put("message", "Erro inesperado no servidor. Favor contactar o suporte");
+            error.put("message", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }
@@ -67,7 +67,7 @@ public class ProductController {
             return ResponseEntity.ok(service.update(id, productSupplyDTO));
         } catch (Exception e) {
             Map<String, Object> error = new HashMap<>();
-            error.put("message", "Erro inesperado no servidor. Favor contactar o suporte");
+            error.put("message", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }
@@ -80,7 +80,7 @@ public class ProductController {
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             Map<String, Object> error = new HashMap<>();
-            error.put("message", "Erro inesperado no servidor. Favor contactar o suporte");
+            error.put("message", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }

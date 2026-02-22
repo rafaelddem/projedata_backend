@@ -11,6 +11,19 @@ import jakarta.servlet.http.HttpServletRequest;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ApiErrorResponse> handleProductNotFound(
+            IllegalStateException ex,
+            HttpServletRequest request
+    ) {
+        ApiErrorResponse response = new ApiErrorResponse(
+            ex.getMessage(),
+            request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ApiErrorResponse> handleProductNotFound(
             EntityNotFoundException ex,
@@ -30,7 +43,7 @@ public class GlobalExceptionHandler {
             HttpServletRequest request
     ) {
         ApiErrorResponse response = new ApiErrorResponse(
-            "Erro inesperado",
+            "Erro inesperado no servidor. Favor contactar o suporte",
             request.getRequestURI()
         );
 

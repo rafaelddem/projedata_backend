@@ -45,6 +45,13 @@ public class RawMaterialService {
     }
 
     public void delete(int id) {
+        RawMaterial rawMaterial = repository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Matéria-prima não encontrada."));
+
+        if (!rawMaterial.getSupplies().isEmpty()) {
+            throw new IllegalStateException("Matérias-primas utilizadas por algum Produto não podem ser excluídas.");
+        }
+
         repository.deleteById(id);
     }
 }
