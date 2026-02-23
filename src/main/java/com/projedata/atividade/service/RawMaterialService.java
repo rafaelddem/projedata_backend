@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.projedata.atividade.dto.raw_material.RawMaterialCreateDTO;
+import com.projedata.atividade.dto.raw_material.RawMaterialUpdateDTO;
 import com.projedata.atividade.model.RawMaterial;
 import com.projedata.atividade.repository.RawMaterialRepository;
 
@@ -35,15 +36,15 @@ public class RawMaterialService {
             .orElseThrow(() -> new EntityNotFoundException("Matéria-prima não encontrada"));
     }
 
-    public RawMaterial update(int id, RawMaterial updatedRawMaterial) {
+    public RawMaterial update(int id, RawMaterialUpdateDTO rawMaterialDTO) {
         RawMaterial RawMaterial = repository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Matéria-prima não encontrada"));
 
-        if (updatedRawMaterial.getName() != null) 
-            RawMaterial.setName(updatedRawMaterial.getName());
+        if (rawMaterialDTO.getName() != null) 
+            RawMaterial.setName(rawMaterialDTO.getName());
 
-        if (updatedRawMaterial.getQuantity() != 0) 
-            RawMaterial.setQuantity(updatedRawMaterial.getQuantity());
+        if (rawMaterialDTO.getQuantity() != 0) 
+            RawMaterial.setQuantity(rawMaterialDTO.getQuantity());
 
         return repository.save(RawMaterial);
     }

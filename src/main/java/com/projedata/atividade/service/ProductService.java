@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.projedata.atividade.dto.product.ProductCreateDTO;
+import com.projedata.atividade.dto.product.ProductUpdateDTO;
 import com.projedata.atividade.dto.supply.SupplyCreateDTO;
 import com.projedata.atividade.model.Product;
 import com.projedata.atividade.model.RawMaterial;
@@ -64,14 +65,14 @@ public class ProductService {
     }
 
     @Transactional
-    public Product update(int id, ProductCreateDTO productSupplyDTO) {
+    public Product update(int id, ProductUpdateDTO productSupplyDTO) {
         Product product = repository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
 
         if (productSupplyDTO.getName() != null) 
             product.setName(productSupplyDTO.getName());
 
-        if (productSupplyDTO.getValue() != 0) 
+        if (productSupplyDTO.getValue() != null) 
             product.setValue(productSupplyDTO.getValue());
 
         product.getSupplies().clear();

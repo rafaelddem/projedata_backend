@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.projedata.atividade.dto.raw_material.RawMaterialCreateDTO;
+import com.projedata.atividade.dto.raw_material.RawMaterialUpdateDTO;
 import com.projedata.atividade.model.RawMaterial;
 import com.projedata.atividade.service.RawMaterialService;
 
@@ -43,8 +44,8 @@ public class RawMaterialController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RawMaterial> update(@PathVariable int id, @RequestBody RawMaterial rawMaterial) {
-        return ResponseEntity.ok(service.update(id, rawMaterial));
+    public ResponseEntity<RawMaterial> update(@PathVariable int id, @Valid @RequestBody RawMaterialUpdateDTO rawMaterialDTO) {
+        return ResponseEntity.ok(service.update(id, rawMaterialDTO));
     }
 
     @DeleteMapping("/{id}")

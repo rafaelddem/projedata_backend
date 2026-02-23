@@ -1,6 +1,7 @@
 package com.projedata.atividade.controller;
 
 import com.projedata.atividade.dto.product.ProductCreateDTO;
+import com.projedata.atividade.dto.product.ProductUpdateDTO;
 import com.projedata.atividade.model.Product;
 import com.projedata.atividade.service.ProductService;
 
@@ -45,7 +46,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> update(@PathVariable int id, @RequestBody ProductCreateDTO productSupplyDTO) {
+    public ResponseEntity<Product> update(@PathVariable int id, @RequestBody @Valid ProductUpdateDTO productSupplyDTO) {
         return ResponseEntity.ok(service.update(id, productSupplyDTO));
     }
 
