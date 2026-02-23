@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.projedata.atividade.dto.raw_material.RawMaterialCreateDTO;
 import com.projedata.atividade.model.RawMaterial;
 import com.projedata.atividade.repository.RawMaterialRepository;
 
@@ -18,7 +19,10 @@ public class RawMaterialService {
         this.repository = repository;
     }
 
-    public RawMaterial create(RawMaterial rawMaterial) {
+    public RawMaterial create(RawMaterialCreateDTO rawMaterialDTO) {
+        RawMaterial rawMaterial = new RawMaterial();
+        rawMaterial.setName(rawMaterialDTO.getName());
+        if (rawMaterialDTO.getQuantity() != null) rawMaterial.setQuantity(rawMaterialDTO.getQuantity());
         return repository.save(rawMaterial);
     }
 

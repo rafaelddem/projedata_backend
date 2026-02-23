@@ -1,4 +1,4 @@
-package com.projedata.atividade.dto;
+package com.projedata.atividade.dto.supply;
 
 public class SupplyDTO {
 

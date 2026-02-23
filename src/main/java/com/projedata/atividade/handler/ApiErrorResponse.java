@@ -1,22 +1,24 @@
 package com.projedata.atividade.handler;
 
+import java.util.List;
+
 public class ApiErrorResponse {
-    private String message;
     private String timestamp;
     private String path;
+    private List<String> errors;
 
-    public ApiErrorResponse(String message, String path) {
-        this.message = message;
+    public ApiErrorResponse(List<String> errors, String path) {
+        this.errors = errors;
         this.timestamp = java.time.LocalDateTime.now().toString();
         this.path = path;
     }
 
-    public String getMessage() {
-        return this.message;
+    public List<String> getErrors() {
+        return this.errors;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setErrors(List<String> errors) {
+        this.errors = errors;
     }
 
     public String getTimestamp() {

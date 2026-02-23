@@ -1,11 +1,19 @@
-package com.projedata.atividade.dto;
+package com.projedata.atividade.dto.supply;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class RawMaterialSupplyDTO {
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
+public class SupplyCreateDTO {
+
+    @NotNull(message = "Uma matéria-prima precisa ser informada")
+    @Positive(message = "A matéria-prima informada é inválida")
     @JsonProperty("raw_material_id")
     private int rawMaterialId;
+
+    @NotNull(message = "Uma quantidade da matéria-prima precisa ser informada")
+    @Positive(message = "A quantidade da matéria-prima deve ser maior que 0")
     private int quantity;
 
     public int getRawMaterialId() {

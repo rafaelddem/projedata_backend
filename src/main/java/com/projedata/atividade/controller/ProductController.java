@@ -1,11 +1,12 @@
 package com.projedata.atividade.controller;
 
-import com.projedata.atividade.dto.ProductSupplyDTO;
+import com.projedata.atividade.dto.product.ProductCreateDTO;
 import com.projedata.atividade.model.Product;
 import com.projedata.atividade.service.ProductService;
 
-import java.util.HashMap;
-import java.util.Map;
+import jakarta.validation.Valid;
+
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,64 +25,34 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody ProductSupplyDTO productSupplyDTO) {
-        try {
-            Product product = service.create(productSupplyDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body(product);
-        } catch (Exception e) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("message", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-        }
+    public ResponseEntity<Product> create(@RequestBody @Valid ProductCreateDTO productSupplyDTO) {
+        Product product = service.create(productSupplyDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 
     @GetMapping
-    public ResponseEntity<?> list() {
-        try {
-            return ResponseEntity.ok(service.list());
-        } catch (Exception e) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("message", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-        }
+    public ResponseEntity<List<Product>> list() {
+        return ResponseEntity.ok(service.list());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> find(@PathVariable int id) {
-        try {
-            Product product = service.find(id);
+    public ResponseEntity<Product> find(@PathVariable int id) {
+        Product product = service.find(id);
 
-            return (product != null)
-                ? ResponseEntity.ok(product)
-                : ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("message", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-        }
+        return (product != null)
+            ? ResponseEntity.ok(product)
+            : ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable int id, @RequestBody ProductSupplyDTO productSupplyDTO) {
-        try {
-            return ResponseEntity.ok(service.update(id, productSupplyDTO));
-        } catch (Exception e) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("message", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-        }
+    public ResponseEntity<Product> update(@PathVariable int id, @RequestBody ProductCreateDTO productSupplyDTO) {
+        return ResponseEntity.ok(service.update(id, productSupplyDTO));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable int id) {
-        try {
-            service.delete(id);
+        service.delete(id);
 
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("message", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-        }
+        return ResponseEntity.noContent().build();
     }
 }

@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.projedata.atividade.dto.ProductSupplyDTO;
-import com.projedata.atividade.dto.RawMaterialSupplyDTO;
+import com.projedata.atividade.dto.product.ProductCreateDTO;
+import com.projedata.atividade.dto.supply.SupplyCreateDTO;
 import com.projedata.atividade.model.Product;
 import com.projedata.atividade.model.RawMaterial;
 import com.projedata.atividade.model.Supply;
@@ -31,21 +31,21 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(ProductSupplyDTO productSupplyDTO) {
+    public Product create(ProductCreateDTO productSupplyDTO) {
         Product product = new Product();
         product.setName(productSupplyDTO.getName());
         product.setValue(productSupplyDTO.getValue());
 
         List<Supply> supplies = new ArrayList<>();
 
-        for (RawMaterialSupplyDTO rawMaterialSupplyDTO : productSupplyDTO.getRawMaterialSupplies()) {
-            RawMaterial rawMaterial = rawMaterialRepository.findById(rawMaterialSupplyDTO.getRawMaterialId())
+        for (SupplyCreateDTO supplyCreateDTO : productSupplyDTO.getRawMaterialSupplies()) {
+            RawMaterial rawMaterial = rawMaterialRepository.findById(supplyCreateDTO.getRawMaterialId())
                 .orElseThrow(() -> new EntityNotFoundException("Matéria-prima não encontrada"));
 
             Supply supply = new Supply();
             supply.setProduct(product);
             supply.setRawMaterial(rawMaterial);
-            supply.setQuantity(rawMaterialSupplyDTO.getQuantity());
+            supply.setQuantity(supplyCreateDTO.getQuantity());
 
             supplies.add(supply);
         }
@@ -64,7 +64,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Product update(int id, ProductSupplyDTO productSupplyDTO) {
+    public Product update(int id, ProductCreateDTO productSupplyDTO) {
         Product product = repository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
 
@@ -77,14 +77,14 @@ public class ProductService {
         product.getSupplies().clear();
         repository.flush();
 
-        for (RawMaterialSupplyDTO rawMaterialSupplyDTO : productSupplyDTO.getRawMaterialSupplies()) {
-            RawMaterial rawMaterial = rawMaterialRepository.findById(rawMaterialSupplyDTO.getRawMaterialId())
+        for (SupplyCreateDTO supplyUpdateDTO : productSupplyDTO.getRawMaterialSupplies()) {
+            RawMaterial rawMaterial = rawMaterialRepository.findById(supplyUpdateDTO.getRawMaterialId())
                 .orElseThrow(() -> new EntityNotFoundException("Matéria-prima não encontrada"));
 
             Supply supply = new Supply();
             supply.setProduct(product);
             supply.setRawMaterial(rawMaterial);
-            supply.setQuantity(rawMaterialSupplyDTO.getQuantity());
+            supply.setQuantity(supplyUpdateDTO.getQuantity());
 
             product.getSupplies().add(supply);
         }

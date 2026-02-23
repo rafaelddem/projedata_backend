@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.projedata.atividade.dto.SupplyDTO;
+import com.projedata.atividade.dto.supply.SupplyDTO;
 import com.projedata.atividade.repository.SupplyRepository;
 
 @Service

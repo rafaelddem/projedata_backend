@@ -1,14 +1,16 @@
 package com.projedata.atividade.controller;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.projedata.atividade.dto.raw_material.RawMaterialCreateDTO;
 import com.projedata.atividade.model.RawMaterial;
 import com.projedata.atividade.service.RawMaterialService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/raw_materials")
@@ -21,64 +23,34 @@ public class RawMaterialController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody RawMaterial rawMaterial) {
-        try {
-            rawMaterial = service.create(rawMaterial);
-            return ResponseEntity.status(HttpStatus.CREATED).body(rawMaterial);
-        } catch (Exception e) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("message", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-        }
+    public ResponseEntity<RawMaterial> create(@RequestBody @Valid RawMaterialCreateDTO rawMaterialDTO) {
+        RawMaterial rawMaterial = service.create(rawMaterialDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(rawMaterial);
     }
 
     @GetMapping
-    public ResponseEntity<?> list() {
-        try {
-            return ResponseEntity.ok(service.list());
-        } catch (Exception e) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("message", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-        }
+    public ResponseEntity<List<RawMaterial>> list() {
+        return ResponseEntity.ok(service.list());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> find(@PathVariable int id) {
-        try {
-            RawMaterial rawMaterial = service.find(id);
+    public ResponseEntity<RawMaterial> find(@PathVariable int id) {
+        RawMaterial rawMaterial = service.find(id);
 
-            return (rawMaterial != null)
-                ? ResponseEntity.ok(rawMaterial)
-                : ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("message", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-        }
+        return (rawMaterial != null)
+            ? ResponseEntity.ok(rawMaterial)
+            : ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable int id, @RequestBody RawMaterial rawMaterial) {
-        try {
-            return ResponseEntity.ok(service.update(id, rawMaterial));
-        } catch (Exception e) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("message", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-        }
+    public ResponseEntity<RawMaterial> update(@PathVariable int id, @RequestBody RawMaterial rawMaterial) {
+        return ResponseEntity.ok(service.update(id, rawMaterial));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable int id) {
-        try {
-            service.delete(id);
+        service.delete(id);
 
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("message", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-        }
+        return ResponseEntity.noContent().build();
     }
 }
